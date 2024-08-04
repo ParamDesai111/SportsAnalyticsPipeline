@@ -1,3 +1,9 @@
 # Databricks notebook source
-# API key for BALLDONTLIE API (https://api.balldontlie.io/v1)
-authorization_key = "f23ff27a-650f-4d31-aa3e-c2ecf104e972"
+# MAGIC %md
+# MAGIC # Parameters for Solution
+
+# COMMAND ----------
+
+# Connection to storage account
+connection_string = "getfromazure"
+container_land_api_response = "land-api-response"
