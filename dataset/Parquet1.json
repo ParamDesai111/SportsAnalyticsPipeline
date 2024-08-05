@@ -1,0 +1,153 @@
+{
+	"name": "Parquet1",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureBlobStorage2",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Parquet",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"folderPath": "transformed",
+				"container": "raw-data"
+			},
+			"compressionCodec": "snappy"
+		},
+		"schema": [
+			{
+				"name": "id",
+				"type": "INT32"
+			},
+			{
+				"name": "playerName",
+				"type": "UTF8"
+			},
+			{
+				"name": "position",
+				"type": "UTF8"
+			},
+			{
+				"name": "age",
+				"type": "INT32"
+			},
+			{
+				"name": "games",
+				"type": "INT32"
+			},
+			{
+				"name": "gamesStarted",
+				"type": "INT32"
+			},
+			{
+				"name": "minutesPg",
+				"type": "FLOAT"
+			},
+			{
+				"name": "fieldGoals",
+				"type": "INT32"
+			},
+			{
+				"name": "fieldAttempts",
+				"type": "INT32"
+			},
+			{
+				"name": "fieldPercent",
+				"type": "FLOAT"
+			},
+			{
+				"name": "threeFg",
+				"type": "INT32"
+			},
+			{
+				"name": "threeAttempts",
+				"type": "INT32"
+			},
+			{
+				"name": "threePercent",
+				"type": "FLOAT"
+			},
+			{
+				"name": "twoFg",
+				"type": "INT32"
+			},
+			{
+				"name": "twoAttempts",
+				"type": "INT32"
+			},
+			{
+				"name": "twoPercent",
+				"type": "FLOAT"
+			},
+			{
+				"name": "effectFgPercent",
+				"type": "FLOAT"
+			},
+			{
+				"name": "ft",
+				"type": "INT32"
+			},
+			{
+				"name": "ftAttempts",
+				"type": "INT32"
+			},
+			{
+				"name": "ftPercent",
+				"type": "FLOAT"
+			},
+			{
+				"name": "offensiveRb",
+				"type": "INT32"
+			},
+			{
+				"name": "defensiveRb",
+				"type": "INT32"
+			},
+			{
+				"name": "totalRb",
+				"type": "INT32"
+			},
+			{
+				"name": "assists",
+				"type": "INT32"
+			},
+			{
+				"name": "steals",
+				"type": "INT32"
+			},
+			{
+				"name": "blocks",
+				"type": "INT32"
+			},
+			{
+				"name": "turnovers",
+				"type": "INT32"
+			},
+			{
+				"name": "personalFouls",
+				"type": "INT32"
+			},
+			{
+				"name": "points",
+				"type": "INT32"
+			},
+			{
+				"name": "team",
+				"type": "UTF8"
+			},
+			{
+				"name": "season",
+				"type": "INT32"
+			},
+			{
+				"name": "playerId",
+				"type": "UTF8"
+			},
+			{
+				"name": "teamName",
+				"type": "UTF8"
+			}
+		]
+	}
+}
