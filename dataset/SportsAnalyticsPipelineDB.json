@@ -1,0 +1,161 @@
+{
+	"name": "SportsAnalyticsPipelineDB",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureSqlDatabaseSportsAnalyticsPipeline",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [
+			{
+				"name": "id",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "playerId",
+				"type": "varchar"
+			},
+			{
+				"name": "teamId",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "season",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "games",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "gamesStarted",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "minutesPg",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "fieldGoals",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "fieldAttempts",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "fieldPercent",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "threeFg",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "threeAttempts",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "threePercent",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "twoFg",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "twoAttempts",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "twoPercent",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "effectFgPercent",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "ft",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "ftAttempts",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "ftPercent",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "offensiveRb",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "defensiveRb",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "totalRb",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "assists",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "steals",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "blocks",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "turnovers",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "personalFouls",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "points",
+				"type": "int",
+				"precision": 10
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "PlayerStatistics"
+		}
+	}
+}
