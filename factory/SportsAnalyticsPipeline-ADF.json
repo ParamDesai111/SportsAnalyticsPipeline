@@ -1,0 +1,9 @@
+{
+	"name": "SportsAnalyticsPipeline-ADF",
+	"location": "eastus",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "bd2fdd19-8dd5-43a7-96af-71b0030d39ea",
+		"tenantId": "6ad91895-de06-485e-bc51-fce126cc8530"
+	}
+}
