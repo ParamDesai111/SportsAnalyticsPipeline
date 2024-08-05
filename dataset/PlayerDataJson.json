@@ -1,0 +1,119 @@
+{
+	"name": "PlayerDataJson",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureBlobStorage",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Json",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"folderPath": "playerdata",
+				"container": "land-api-response"
+			}
+		},
+		"schema": {
+			"type": "object",
+			"properties": {
+				"id": {
+					"type": "integer"
+				},
+				"playerName": {
+					"type": "string"
+				},
+				"position": {
+					"type": "string"
+				},
+				"age": {
+					"type": "integer"
+				},
+				"games": {
+					"type": "integer"
+				},
+				"gamesStarted": {
+					"type": "integer"
+				},
+				"minutesPg": {
+					"type": "number"
+				},
+				"fieldGoals": {
+					"type": "integer"
+				},
+				"fieldAttempts": {
+					"type": "integer"
+				},
+				"fieldPercent": {
+					"type": "number"
+				},
+				"threeFg": {
+					"type": "integer"
+				},
+				"threeAttempts": {
+					"type": "integer"
+				},
+				"threePercent": {
+					"type": "number"
+				},
+				"twoFg": {
+					"type": "integer"
+				},
+				"twoAttempts": {
+					"type": "integer"
+				},
+				"twoPercent": {
+					"type": "number"
+				},
+				"effectFgPercent": {
+					"type": "number"
+				},
+				"ft": {
+					"type": "integer"
+				},
+				"ftAttempts": {
+					"type": "integer"
+				},
+				"ftPercent": {
+					"type": "number"
+				},
+				"offensiveRb": {
+					"type": "integer"
+				},
+				"defensiveRb": {
+					"type": "integer"
+				},
+				"totalRb": {
+					"type": "integer"
+				},
+				"assists": {
+					"type": "integer"
+				},
+				"steals": {
+					"type": "integer"
+				},
+				"blocks": {
+					"type": "integer"
+				},
+				"turnovers": {
+					"type": "integer"
+				},
+				"personalFouls": {
+					"type": "integer"
+				},
+				"points": {
+					"type": "integer"
+				},
+				"team": {
+					"type": "string"
+				},
+				"season": {
+					"type": "integer"
+				},
+				"playerId": {
+					"type": "string"
+				}
+			}
+		}
+	}
+}
