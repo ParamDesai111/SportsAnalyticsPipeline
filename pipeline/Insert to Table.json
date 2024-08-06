@@ -3,36 +3,9 @@
 	"properties": {
 		"activities": [
 			{
-				"name": "03-Stream",
-				"type": "DatabricksNotebook",
-				"dependsOn": [],
-				"policy": {
-					"timeout": "0.12:00:00",
-					"retry": 0,
-					"retryIntervalInSeconds": 30,
-					"secureOutput": false,
-					"secureInput": false
-				},
-				"userProperties": [],
-				"typeProperties": {
-					"notebookPath": "/Users/paramdesai4@cmail.carleton.ca/SportsAnalyticsPipeline/03-Stream"
-				},
-				"linkedServiceName": {
-					"referenceName": "AzureDatabricks1",
-					"type": "LinkedServiceReference"
-				}
-			},
-			{
 				"name": "Copy data - Player Stats",
 				"type": "Copy",
-				"dependsOn": [
-					{
-						"activity": "03-Stream",
-						"dependencyConditions": [
-							"Succeeded"
-						]
-					}
-				],
+				"dependsOn": [],
 				"policy": {
 					"timeout": "0.12:00:00",
 					"retry": 0,
@@ -80,7 +53,7 @@
 				"type": "Copy",
 				"dependsOn": [
 					{
-						"activity": "03-Stream",
+						"activity": "Copy data - Player Stats",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -133,7 +106,7 @@
 				"type": "Copy",
 				"dependsOn": [
 					{
-						"activity": "03-Stream",
+						"activity": "Copy data - Player",
 						"dependencyConditions": [
 							"Succeeded"
 						]
