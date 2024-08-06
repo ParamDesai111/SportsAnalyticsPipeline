@@ -49,10 +49,55 @@ spark.conf.set(
   access_key
 )
 
-seasonal_data_players_location = "abfss://land-api-response@sportsanalyticsplstg.dfs.core.windows.net/playerdata"
-schema_checkpoint = "abfss://land-api-response@sportsanalyticsplstg.dfs.core.windows.net/schema_playerdata"
-file_checkpoint = "abfss://land-api-response@sportsanalyticsplstg.dfs.core.windows.net/file_checkpoint"
-file_checkpoint = "abfss://land-api-response@sportsanalyticsplstg.dfs.core.windows.net/file_checkpoint_stats"
+#Landing to Raw Stream Params
+
+# Teams with Team Code
+team_dict = {
+    "ATL": "Atlanta Hawks",
+    "BOS": "Boston Celtics",
+    "BRK": "Brooklyn Nets",
+    "CHH": "Charlotte Hornets",
+    "CHI": "Chicago Bulls",
+    "CLE": "Cleveland Cavaliers",
+    "DAL": "Dallas Mavericks",
+    "DEN": "Denver Nuggets",
+    "DET": "Detroit Pistons",
+    "GSW": "Golden State Warriors",
+    "HOU": "Houston Rockets",
+    "IND": "Indiana Pacers",
+    "LAC": "Los Angeles Clippers",
+    "LAL": "Los Angeles Lakers",
+    "MIA": "Miami Heat",
+    "MIL": "Milwaukee Bucks",
+    "MIN": "Minnesota Timberwolves",
+    "NJN": "New Jersey Nets",
+    "NYK": "New York Knicks",
+    "ORL": "Orlando Magic",
+    "PHI": "Philadelphia 76ers",
+    "PHO": "Phoenix Suns",
+    "POR": "Portland Trail Blazers",
+    "SAC": "Sacramento Kings",
+    "SAS": "San Antonio Spurs",
+    "SEA": "Seattle SuperSonics",
+    "TOT": "Various Teams",
+    "UTA": "Utah Jazz",
+    "WSB": "Washington Bullets",
+    "CHA": "Charlotte Bobcats",
+    "MEM": "Memphis Grizzlies",
+    "VAN": "Vancouver Grizzlies",
+    "NOP": "New Orleans Pelicans",
+    "NOH": "New Orleans Hornets",
+    "OKC": "Oklahoma City Thunder",
+    "TOR": "Toronto Raptors",
+    "WAS": "Washington Wizards"
+}
+
+input_path = "abfss://land-api-response@sportsanalyticsplstg.dfs.core.windows.net/playerdata"
+output_path_teams = "abfss://raw-data@sportsanalyticsplstg.dfs.core.windows.net/teams/"
+output_path_playerstats = "abfss://raw-data@sportsanalyticsplstg.dfs.core.windows.net/playerstats"
+output_path_player = "abfss://raw-data@sportsanalyticsplstg.dfs.core.windows.net/player"
+
+
 
 # COMMAND ----------
 
@@ -64,7 +109,7 @@ jdbcUrl = f"jdbc:sqlserver://{jdbcHostname}:{jdbcPort};database={jdbcDatabase};e
 
 connectionProperties = {
   "user" : "SAPDBAdmin",
-  "password" : "",
+  "password" : password,
   "driver" : "com.microsoft.sqlserver.jdbc.SQLServerDriver"
 }
 

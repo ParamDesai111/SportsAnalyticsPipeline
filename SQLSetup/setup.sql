@@ -1,19 +1,20 @@
 CREATE TABLE Players (
-    playerId VARCHAR(50) PRIMARY KEY,
-    playerName VARCHAR(100),
-    position VARCHAR(5),
+    playerId VARCHAR(1000) PRIMARY KEY,
+    playerName VARCHAR(1000),
+    position VARCHAR(1000),
     age INT
 );
 
+
 CREATE TABLE Teams (
     teamId INT PRIMARY KEY IDENTITY(1,1),
-    teamCode VARCHAR(3) UNIQUE,
-    teamName VARCHAR(100) UNIQUE
+    teamCode VARCHAR(1000) UNIQUE,
+    teamName VARCHAR(1000) UNIQUE
 );
 
 CREATE TABLE PlayerStatistics (
     id INT PRIMARY KEY,
-    playerId VARCHAR(50),
+    playerId VARCHAR(1000),
     teamId INT,
     season INT,
     games INT,
@@ -40,7 +41,5 @@ CREATE TABLE PlayerStatistics (
     blocks INT,
     turnovers INT,
     personalFouls INT,
-    points INT,
-    FOREIGN KEY (playerId) REFERENCES Players(playerId),
-    FOREIGN KEY (teamId) REFERENCES Teams(teamId)
+    points INT
 );

@@ -3,106 +3,46 @@
 
 # COMMAND ----------
 
-from pyspark.sql import SparkSession
+from pyspark.sql.functions import col, monotonically_increasing_id, row_number
+from pyspark.sql.window import Window
+from pyspark.sql.types import *
 
-# Initialize Spark session
-spark = SparkSession.builder.appName("InsertTeams").getOrCreate()
+# Set Azure Storage account key
+spark.conf.set(
+  "fs.azure.account.key.sportsanalyticsplstg.dfs.core.windows.net",
+  access_key
+)
 
-# Teams data dictionary
-team_dict = {
-    "ATL": "Atlanta Hawks",
-    "BOS": "Boston Celtics",
-    "BRK": "Brooklyn Nets",
-    "CHH": "Charlotte Hornets",
-    "CHI": "Chicago Bulls",
-    "CLE": "Cleveland Cavaliers",
-    "DAL": "Dallas Mavericks",
-    "DEN": "Denver Nuggets",
-    "DET": "Detroit Pistons",
-    "GSW": "Golden State Warriors",
-    "HOU": "Houston Rockets",
-    "IND": "Indiana Pacers",
-    "LAC": "Los Angeles Clippers",
-    "LAL": "Los Angeles Lakers",
-    "MIA": "Miami Heat",
-    "MIL": "Milwaukee Bucks",
-    "MIN": "Minnesota Timberwolves",
-    "NJN": "New Jersey Nets",
-    "NYK": "New York Knicks",
-    "ORL": "Orlando Magic",
-    "PHI": "Philadelphia 76ers",
-    "PHO": "Phoenix Suns",
-    "POR": "Portland Trail Blazers",
-    "SAC": "Sacramento Kings",
-    "SAS": "San Antonio Spurs",
-    "SEA": "Seattle SuperSonics",
-    "TOT": "Various Teams",
-    "UTA": "Utah Jazz",
-    "WSB": "Washington Bullets",
-    "CHA": "Charlotte Bobcats",
-    "MEM": "Memphis Grizzlies",
-    "VAN": "Vancouver Grizzlies",
-    "NOP": "New Orleans Pelicans",
-    "NOH": "New Orleans Hornets",
-    "OKC": "Oklahoma City Thunder",
-    "TOR": "Toronto Raptors",
-    "WAS": "Washington Wizards"
-}
+# Read the JSON data with multiline option
+df = spark.read.option("multiline", "true").json(input_path)
 
-# Convert team_dict to DataFrame
+# Show the schema and some sample rows
+df.printSchema()
+df.show(5, truncate=False)
+
+# Verify that data is read correctly
+print(f"Number of records read: {df.count()}")
+
 teams_data = [(k, v) for k, v in team_dict.items()]
 teams_df = spark.createDataFrame(teams_data, ["teamCode", "teamName"])
 
-# Define function to upsert teams data
-def upsert_teams(df, jdbcUrl, connectionProperties):
-    temp_table_name = "temp_teams"
-    df.createOrReplaceTempView(temp_table_name)
-    upsert_query = f"""
-    MERGE INTO Teams AS target
-    USING {temp_table_name} AS source
-    ON target.teamCode = source.teamCode
-    WHEN MATCHED THEN
-      UPDATE SET target.teamName = source.teamName
-    WHEN NOT MATCHED THEN
-      INSERT (teamCode, teamName) VALUES (source.teamCode, source.teamName)
-    """
-    spark.sql(upsert_query)
+# Save the Teams DataFrame to Azure Blob Storage
+teams_df.write.mode("overwrite").json(output_path_teams)
+print("Teams data written to Azure Blob Storage")
 
-# Perform the upsert operation
-upsert_teams(teams_df, jdbcUrl, connectionProperties)
+# Join the parsed data with the team mappings
+parsed_df = df.join(teams_df, df.team == teams_df.teamCode, "inner").drop("team")
 
+# Verify the joined DataFrame
+print(f"Number of records after join: {parsed_df.count()}")
+parsed_df.show(5, truncate=False)
 
-# COMMAND ----------
-
-from pyspark.sql.functions import col, from_json
-from pyspark.sql.types import *
-
-# Azure SQL Database connection properties
-jdbcHostname = "sportsanalyticspipeline-dbs.database.windows.net"
-jdbcDatabase = "SportsAnalyticsPipeline-ADB"
-jdbcPort = 1433
-jdbcUsername = ""
-jdbcPassword = ""
-jdbcUrl = f"jdbc:sqlserver://{jdbcHostname}:{jdbcPort};database={jdbcDatabase};user={jdbcUsername};password={jdbcPassword}"
-
-connectionProperties = {
-  "user" : jdbcUsername,
-  "password" : jdbcPassword,
-  "driver" : "com.microsoft.sqlserver.jdbc.SQLServerDriver"
-}
-
-# Storage Account Configuration Set
-spark.conf.set(
-  "fs.azure.account.key.sportsanalyticsplstg.dfs.core.windows.net",
-  ""
-)
-
-# Define the schema for the JSON data
-schema = StructType([
+# Define the schema for PlayerStatistics DataFrame
+player_stats_schema = StructType([
     StructField("id", IntegerType(), True),
-    StructField("playerName", StringType(), True),
-    StructField("position", StringType(), True),
-    StructField("age", IntegerType(), True),
+    StructField("playerId", StringType(), True),
+    StructField("teamCode", StringType(), True),
+    StructField("season", IntegerType(), True),
     StructField("games", IntegerType(), True),
     StructField("gamesStarted", IntegerType(), True),
     StructField("minutesPg", FloatType(), True),
@@ -127,97 +67,72 @@ schema = StructType([
     StructField("blocks", IntegerType(), True),
     StructField("turnovers", IntegerType(), True),
     StructField("personalFouls", IntegerType(), True),
-    StructField("points", IntegerType(), True),
-    StructField("team", StringType(), True),
-    StructField("season", IntegerType(), True),
-    StructField("playerId", StringType(), True)
+    StructField("points", IntegerType(), True)
 ])
 
-raw_df = (spark.readStream.format("cloudFiles")
-          .option("cloudFiles.format", "json")
-          .option("cloudFiles.schemaLocation", schema_checkpoint)
-          .option("cloudFiles.checkpointLocation", file_checkpoint)
-          .schema(schema)
-          .load(seasonal_data_players_location))
-
-# Parse the JSON data and apply schema
-parsed_df = raw_df
-
-# Create a streaming DataFrame for teams
-team_dict = {
-    "ATL": "Atlanta Hawks",
-    "BOS": "Boston Celtics",
-    "BRK": "Brooklyn Nets",
-    "CHH": "Charlotte Hornets",
-    "CHI": "Chicago Bulls",
-    "CLE": "Cleveland Cavaliers",
-    "DAL": "Dallas Mavericks",
-    "DEN": "Denver Nuggets",
-    "DET": "Detroit Pistons",
-    "GSW": "Golden State Warriors",
-    "HOU": "Houston Rockets",
-    "IND": "Indiana Pacers",
-    "LAC": "Los Angeles Clippers",
-    "LAL": "Los Angeles Lakers",
-    "MIA": "Miami Heat",
-    "MIL": "Milwaukee Bucks",
-    "MIN": "Minnesota Timberwolves",
-    "NJN": "New Jersey Nets",
-    "NYK": "New York Knicks",
-    "ORL": "Orlando Magic",
-    "PHI": "Philadelphia 76ers",
-    "PHO": "Phoenix Suns",
-    "POR": "Portland Trail Blazers",
-    "SAC": "Sacramento Kings",
-    "SAS": "San Antonio Spurs",
-    "SEA": "Seattle SuperSonics",
-    "TOT": "Various Teams",
-    "UTA": "Utah Jazz",
-    "WSB": "Washington Bullets",
-    "CHA": "Charlotte Bobcats",
-    "MEM": "Memphis Grizzlies",
-    "VAN": "Vancouver Grizzlies",
-    "NOP": "New Orleans Pelicans",
-    "NOH": "New Orleans Hornets",
-    "OKC": "Oklahoma City Thunder",
-    "TOR": "Toronto Raptors",
-    "WAS": "Washington Wizards"
-}
-
-teams_data = [(k, v) for k, v in team_dict.items()]
-teams_df = spark.createDataFrame(teams_data, ["teamCode", "teamName"])
-
-# Write the Teams DataFrame to Azure SQL (upsert logic)
-def upsert_teams(batch_df, batch_id):
-    temp_table_name = "temp_teams"
-    batch_df.createOrReplaceTempView(temp_table_name)
-    query = f"""
-    MERGE INTO Teams AS target
-    USING {temp_table_name} AS source
-    ON target.teamCode = source.teamCode
-    WHEN MATCHED THEN
-      UPDATE SET target.teamName = source.teamName
-    WHEN NOT MATCHED THEN
-      INSERT (teamCode, teamName) VALUES (source.teamCode, source.teamName)
-    """
-    batch_df.sparkSession.sql(query)
-
-# Read the Teams table to get team ID mappings
-team_id_mapping = spark.read.jdbc(url=jdbcUrl, table="Teams", properties=connectionProperties).select("teamCode", "teamId")
-
-# Join the parsed data with the team ID mappings
-parsed_df = parsed_df.join(team_id_mapping, parsed_df.team == team_id_mapping.teamCode).drop("team")
-
-# Insert Players data into Players table
-players_df = parsed_df.select("playerId", "playerName", "position", "age").distinct()
-players_df.writeStream.format("jdbc").option("url", jdbcUrl).option("dbtable", "Players").option("checkpointLocation", "/mnt/checkpoints/players").option("user", jdbcUsername).option("password", jdbcPassword).start()
-
-# Insert PlayerStatistics data into PlayerStatistics table
+# Select and cast columns to match the SQL schema for PlayerStatistics
 stats_df = parsed_df.select(
-    "id", "playerId", "teamId", "season", "games", "gamesStarted", "minutesPg", "fieldGoals", "fieldAttempts", 
-    "fieldPercent", "threeFg", "threeAttempts", "threePercent", "twoFg", "twoAttempts", "twoPercent", "effectFgPercent", 
-    "ft", "ftAttempts", "ftPercent", "offensiveRb", "defensiveRb", "totalRb", "assists", "steals", "blocks", "turnovers", 
-    "personalFouls", "points"
+    col("id").cast(IntegerType()).alias("id"),
+    col("playerId").cast(StringType()).alias("playerId"),
+    col("teamCode").cast(StringType()).alias("teamCode"),
+    col("season").cast(IntegerType()).alias("season"),
+    col("games").cast(IntegerType()).alias("games"),
+    col("gamesStarted").cast(IntegerType()).alias("gamesStarted"),
+    col("minutesPg").cast(FloatType()).alias("minutesPg"),
+    col("fieldGoals").cast(IntegerType()).alias("fieldGoals"),
+    col("fieldAttempts").cast(IntegerType()).alias("fieldAttempts"),
+    col("fieldPercent").cast(FloatType()).alias("fieldPercent"),
+    col("threeFg").cast(IntegerType()).alias("threeFg"),
+    col("threeAttempts").cast(IntegerType()).alias("threeAttempts"),
+    col("threePercent").cast(FloatType()).alias("threePercent"),
+    col("twoFg").cast(IntegerType()).alias("twoFg"),
+    col("twoAttempts").cast(IntegerType()).alias("twoAttempts"),
+    col("twoPercent").cast(FloatType()).alias("twoPercent"),
+    col("effectFgPercent").cast(FloatType()).alias("effectFgPercent"),
+    col("ft").cast(IntegerType()).alias("ft"),
+    col("ftAttempts").cast(IntegerType()).alias("ftAttempts"),
+    col("ftPercent").cast(FloatType()).alias("ftPercent"),
+    col("offensiveRb").cast(IntegerType()).alias("offensiveRb"),
+    col("defensiveRb").cast(IntegerType()).alias("defensiveRb"),
+    col("totalRb").cast(IntegerType()).alias("totalRb"),
+    col("assists").cast(IntegerType()).alias("assists"),
+    col("steals").cast(IntegerType()).alias("steals"),
+    col("blocks").cast(IntegerType()).alias("blocks"),
+    col("turnovers").cast(IntegerType()).alias("turnovers"),
+    col("personalFouls").cast(IntegerType()).alias("personalFouls"),
+    col("points").cast(IntegerType()).alias("points")
 )
-stats_df.writeStream.format("jdbc").option("url", jdbcUrl).option("dbtable", "PlayerStatistics").option("checkpointLocation", "/mnt/checkpoints/player_statistics").option("user", jdbcUsername).option("password", jdbcPassword).start()
+
+# Save the PlayerStatistics data to Azure Blob Storage
+stats_df.write.mode("overwrite").json(output_path_playerstats)
+print("PlayerStatistics data written to Azure Blob Storage")
+
+# Verify the PlayerStatistics DataFrame
+print(f"Number of player statistics records: {stats_df.count()}")
+stats_df.show(5, truncate=False)
+
+# Create a window specification to get the most recent age for each player
+window_spec = Window.partitionBy("playerId").orderBy(col("season").desc())
+
+# Add a row number to each row within the window
+ranked_players_df = parsed_df.withColumn("row_number", row_number().over(window_spec))
+
+# Filter to get only the most recent record for each player
+most_recent_players_df = ranked_players_df.filter(col("row_number") == 1).drop("row_number")
+
+# Select and cast columns to match the SQL schema for Players
+players_df = most_recent_players_df.select(
+    col("playerId").cast(StringType()).alias("playerId"),
+    col("playerName").cast(StringType()).alias("playerName"),
+    col("position").cast(StringType()).alias("position"),
+    col("age").cast(IntegerType()).alias("age")
+).distinct()
+
+# Save the Players data to Azure Blob Storage
+players_df.write.mode("overwrite").json(output_path_player)
+print("Players data written to Azure Blob Storage")
+
+# Verify the Players DataFrame
+print(f"Number of unique players: {players_df.count()}")
+players_df.show(5, truncate=False)
 
