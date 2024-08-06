@@ -1,0 +1,34 @@
+{
+	"name": "SportsAnalyticsPipelineDB_Player",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureSqlDatabaseSportsAnalyticsPipeline",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [
+			{
+				"name": "playerId",
+				"type": "varchar"
+			},
+			{
+				"name": "playerName",
+				"type": "varchar"
+			},
+			{
+				"name": "position",
+				"type": "varchar"
+			},
+			{
+				"name": "age",
+				"type": "int",
+				"precision": 10
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "Players"
+		}
+	}
+}

@@ -1,0 +1,30 @@
+{
+	"name": "SportsAnalyticsPipelineDB_Teams",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureSqlDatabaseSportsAnalyticsPipeline",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [
+			{
+				"name": "teamId",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "teamCode",
+				"type": "varchar"
+			},
+			{
+				"name": "teamName",
+				"type": "varchar"
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "Teams"
+		}
+	}
+}
