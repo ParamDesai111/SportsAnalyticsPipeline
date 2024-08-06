@@ -5,7 +5,14 @@
 			{
 				"name": "Copy data - Player Stats",
 				"type": "Copy",
-				"dependsOn": [],
+				"dependsOn": [
+					{
+						"activity": "Copy data - Teams",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
 				"policy": {
 					"timeout": "0.12:00:00",
 					"retry": 0,
@@ -51,14 +58,7 @@
 			{
 				"name": "Copy data - Player",
 				"type": "Copy",
-				"dependsOn": [
-					{
-						"activity": "Copy data - Player Stats",
-						"dependencyConditions": [
-							"Succeeded"
-						]
-					}
-				],
+				"dependsOn": [],
 				"policy": {
 					"timeout": "0.12:00:00",
 					"retry": 0,
