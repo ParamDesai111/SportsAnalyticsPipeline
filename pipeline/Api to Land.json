@@ -3,7 +3,7 @@
 	"properties": {
 		"activities": [
 			{
-				"name": "Landing to Raw Databricks",
+				"name": "API Data to Landing Databricks",
 				"type": "DatabricksNotebook",
 				"dependsOn": [],
 				"policy": {
