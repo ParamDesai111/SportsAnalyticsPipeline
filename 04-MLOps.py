@@ -41,7 +41,7 @@ player_stats_df = spark.read \
     .load()
 
 # Convert to Pandas DataFrame
-player_stats_pd = player_stats_df.toPandas()
+df = player_stats_df.toPandas()
 
 # COMMAND ----------
 
@@ -50,33 +50,60 @@ player_stats_pd = player_stats_df.toPandas()
 
 # COMMAND ----------
 
+import pandas as pd
+from sklearn.impute import SimpleImputer
+
 # Handle missing values
-player_stats_pd.fillna(0, inplace=True)
+df.fillna(0, inplace=True)
 
 # Create lag features
-player_stats_pd['points_lag_1'] = player_stats_pd.groupby('playerId')['points'].shift(1)
-player_stats_pd['points_lag_2'] = player_stats_pd.groupby('playerId')['points'].shift(2)
-player_stats_pd['points_lag_3'] = player_stats_pd.groupby('playerId')['points'].shift(3)
+lag_features = ['points', 'assists', 'steals', 'blocks', 'turnovers', 'personalFouls']
+for feature in lag_features:
+    df[f'{feature}_lag_1'] = df.groupby('playerId')[feature].shift(1)
+    df[f'{feature}_lag_2'] = df.groupby('playerId')[feature].shift(2)
+    df[f'{feature}_lag_3'] = df.groupby('playerId')[feature].shift(3)
 
 # Create rolling average features
-player_stats_pd['points_rolling_mean_5'] = player_stats_pd.groupby('playerId')['points'].transform(lambda x: x.rolling(window=5).mean())
-player_stats_pd['assists_rolling_mean_5'] = player_stats_pd.groupby('playerId')['assists'].transform(lambda x: x.rolling(window=5).mean())
+rolling_features = ['points', 'assists']
+for feature in rolling_features:
+    df[f'{feature}_rolling_mean_5'] = df.groupby('playerId')[feature].transform(lambda x: x.rolling(window=5).mean())
 
 # Fill missing values created by lag and rolling operations
-player_stats_pd.fillna(0, inplace=True)
+df.fillna(0, inplace=True)
+
+# Player-specific averages over the previous seasons
+player_avg_features = ['points', 'assists', 'steals', 'blocks', 'turnovers', 'personalFouls']
+for feature in player_avg_features:
+    df[f'{feature}_player_avg'] = df.groupby('playerId')[feature].transform(lambda x: x.expanding().mean().shift(1))
+
+# Interaction features
+df['points_assists_interaction'] = df['points'] * df['assists']
+df['steals_blocks_interaction'] = df['steals'] * df['blocks']
 
 # Select features for the model
 features = [
     'games', 'minutesPg', 'fieldGoals', 'fieldAttempts', 'fieldPercent',
     'threeFg', 'threeAttempts', 'threePercent', 'twoFg', 'twoAttempts', 'twoPercent',
     'effectFgPercent', 'ft', 'ftAttempts', 'ftPercent', 'offensiveRb', 'defensiveRb',
-    'totalRb', 'assists', 'steals', 'blocks', 'turnovers', 'personalFouls', 'points',
-    'points_lag_1', 'points_lag_2', 'points_lag_3', 'points_rolling_mean_5', 'assists_rolling_mean_5'
+    'totalRb', 'assists', 'steals', 'blocks', 'turnovers', 'personalFouls',
+    'points_lag_1', 'points_lag_2', 'points_lag_3', 'points_rolling_mean_5', 'assists_rolling_mean_5',
+    'assists_lag_1', 'assists_lag_2', 'assists_lag_3', 'steals_lag_1', 'steals_lag_2', 'steals_lag_3',
+    'blocks_lag_1', 'blocks_lag_2', 'blocks_lag_3', 'turnovers_lag_1', 'turnovers_lag_2', 'turnovers_lag_3',
+    'personalFouls_lag_1', 'personalFouls_lag_2', 'personalFouls_lag_3', 'points_player_avg', 'assists_player_avg',
+    'steals_player_avg', 'blocks_player_avg', 'turnovers_player_avg', 'personalFouls_player_avg',
+    'points_assists_interaction', 'steals_blocks_interaction'
 ]
 
-# Prepare the target variable
-target = 'points'
+# Prepare the target variables
+targets = [
+    'fieldGoals', 'fieldAttempts', 'fieldPercent',
+    'threeFg', 'threeAttempts', 'threePercent', 'twoFg', 'twoAttempts', 'twoPercent',
+    'effectFgPercent', 'ft', 'ftAttempts', 'ftPercent', 'offensiveRb', 'defensiveRb',
+    'totalRb', 'assists', 'steals', 'blocks', 'turnovers', 'personalFouls', 'points'
+]
 
+# Initialize the imputer
+imputer = SimpleImputer(strategy='mean')
 
 # COMMAND ----------
 
@@ -88,24 +115,41 @@ target = 'points'
 from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.metrics import mean_squared_error
+import numpy as np
 
-# Split data into features (X) and target (y)
-X = player_stats_pd[features]
-y = player_stats_pd[target]
+# Train and evaluate models for each target variable
+models = {}
+for target in targets:
+    X = df[features]
+    y = df[target]
 
-# Split data into training and testing sets
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+    # Impute missing values
+    X = imputer.fit_transform(X)
 
-# Train a Random Forest Regressor
-model = RandomForestRegressor(n_estimators=100, random_state=42)
-model.fit(X_train, y_train)
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
-# Predict on the test set
-y_pred = model.predict(X_test)
+    model = RandomForestRegressor(n_estimators=100, random_state=42)
+    model.fit(X_train, y_train)
+    
+    models[target] = model
+    
+    y_pred = model.predict(X_test)
+    rmse = mean_squared_error(y_test, y_pred, squared=False)
+    print(f"{target} RMSE: {rmse}")
 
-# Evaluate the model
-rmse = mean_squared_error(y_test, y_pred, squared=False)
-print(f"RMSE: {rmse}")
+# Prepare data for the 2024 season prediction
+future_data = df[df['season'] == 2023].copy()
+future_data['season'] = 2024
+
+# Impute missing values for future data
+future_data_features = imputer.transform(future_data[features])
+
+# Make predictions for each target variable
+for target in targets:
+    future_data[f'predicted_{target}'] = models[target].predict(future_data_features)
+
+# Prepare data for insertion
+predictions = future_data[['playerId', 'season'] + [f'predicted_{target}' for target in targets]].copy()
 
 
 # COMMAND ----------
@@ -115,42 +159,50 @@ print(f"RMSE: {rmse}")
 
 # COMMAND ----------
 
-# Function to predict future performance
-def predict_future_performance(model, data, seasons):
-    predictions = []
-    for season in seasons:
-        # Prepare data for the next season prediction
-        data['season'] = season
-        future_data = data.copy()
+# Prepare data for the 2024 season prediction
+future_data = df[df['season'] == 2023].copy()
+future_data['season'] = 2024
 
-        # Make predictions
-        future_data['predicted_points'] = model.predict(future_data[features])
-        
-        # Store predictions
-        predictions.append(future_data[['playerId', 'season', 'predicted_points']])
-        
-        # Use predicted data for the next season's prediction
-        data = future_data
-    
-    return pd.concat(predictions)
+# Impute missing values for future data
+future_data_features = imputer.transform(future_data[features])
 
-# Prepare initial data for 2024 prediction
-initial_data = player_stats_pd[player_stats_pd['season'] == 2023].copy()
+# Make predictions for each target variable
+for target in targets:
+    future_data[f'predicted_{target}'] = models[target].predict(future_data_features)
 
-# Predict for 2024, 2025, and 2026
-future_predictions = predict_future_performance(model, initial_data, [2024, 2025, 2026])
+# Prepare data for insertion
+predictions = future_data[['playerId', 'season'] + [f'predicted_{target}' for target in targets]].copy()
 
 
 # COMMAND ----------
 
 # Display the predictions for all years and any player ID
-print(future_predictions)
 
+# Set display options to show all rows and columns
+pd.set_option('display.max_rows', None)
+pd.set_option('display.max_columns', None)
+# print(predictions)
 # To filter predictions for a specific player, e.g., playerId = 'some_player_id'
 player_id = 'doncilu01'
-player_predictions = future_predictions[future_predictions['playerId'] == player_id]
-print(player_predictions)
+player_predictions = predictions[predictions['playerId'] == player_id]
+# print(player_predictions)
+display(player_predictions)
 
+
+# COMMAND ----------
+
+query = "(SELECT * FROM PlayerStatistics WHERE season = 2024 AND playerId = 'doncilu01') AS PlayerStatistics"
+
+playerdf = spark.read \
+    .format("jdbc") \
+    .option("url", jdbcUrl) \
+    .option("dbtable", query) \
+    .option("driver", "com.microsoft.sqlserver.jdbc.SQLServerDriver") \
+    .load()
+
+# Convert to Pandas DataFrame
+doncilu01_pd = playerdf.toPandas()
+display(doncilu01_pd)
 
 # COMMAND ----------
 
