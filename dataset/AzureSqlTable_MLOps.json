@@ -1,0 +1,136 @@
+{
+	"name": "AzureSqlTable_MLOps",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureSqlDatabaseSportsAnalyticsPipeline",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [
+			{
+				"name": "playerId",
+				"type": "varchar"
+			},
+			{
+				"name": "season",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "predicted_fieldGoals",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "predicted_fieldAttempts",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "predicted_fieldPercent",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "predicted_threeFg",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "predicted_threeAttempts",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "predicted_threePercent",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "predicted_twoFg",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "predicted_twoAttempts",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "predicted_twoPercent",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "predicted_effectFgPercent",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "predicted_ft",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "predicted_ftAttempts",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "predicted_ftPercent",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "predicted_offensiveRb",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "predicted_defensiveRb",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "predicted_totalRb",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "predicted_assists",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "predicted_steals",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "predicted_blocks",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "predicted_turnovers",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "predicted_personalFouls",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "predicted_points",
+				"type": "float",
+				"precision": 15
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "PlayerStatisticsPredicted"
+		}
+	}
+}
