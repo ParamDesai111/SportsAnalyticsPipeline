@@ -1,13 +1,20 @@
 SELECT * 
 FROM PlayerStatistics AS PLS
 JOIN Players AS P ON PLS.playerId = P.playerId
-WHERE P.playerName = 'Lebron James';
+WHERE P.playerName = 'Seth Curry';
 
-(SELECT * FROM PlayerStatistics WHERE season < 2024)
+(SELECT count(*) FROM Players)
 
-SELECT * FROM PlayerStatistics
-WHERE playerId = 'doncilu01'
-AND season = 2024
+SELECT COUNT(DISTINCT playerId) AS distinct_player_count
+FROM PlayerStatistics
+WHERE season = 2023;
 
 SELECT * FROM Players
 WHERE playerId = 'yurtsom01'
+
+SELECT * FROM PlayerStatisticsPredicted;
+
+SELECT * 
+FROM PlayerStatisticsPredicted AS PLSP
+JOIN Players AS P ON PLSP.playerId = P.playerId
+WHERE P.playerName = 'Seth Curry';
