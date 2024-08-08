@@ -206,33 +206,24 @@ display(doncilu01_pd)
 
 # COMMAND ----------
 
-# Create a connection to Azure SQL Database
-conn = pyodbc.connect(
-    f'DRIVER={{ODBC Driver 17 for SQL Server}};SERVER={jdbcHostname};DATABASE={jdbcDatabase};UID={jdbcUsername};PWD={jdbcPassword}'
-)
-cursor = conn.cursor()
+from azure.storage.blob import BlobServiceClient, BlobClient, ContainerClient
 
-# Create a new table for storing predictions
-cursor.execute("""
-    IF OBJECT_ID('PlayerPredictions', 'U') IS NULL
-    CREATE TABLE PlayerPredictions (
-        playerId VARCHAR(1000),
-        season INT,
-        predictedPoints FLOAT,
-        PRIMARY KEY (playerId, season)
-    )
-""")
-conn.commit()
+# Save the predictions DataFrame as a CSV file
+csv_file_path = "/tmp/player_predictions.csv"
+predictions.to_csv(csv_file_path, index=False)
 
-# Insert predictions into the PlayerPredictions table
-for _, row in future_predictions.iterrows():
-    cursor.execute("""
-        INSERT INTO PlayerPredictions (playerId, season, predictedPoints)
-        VALUES (?, ?, ?)
-        ON DUPLICATE KEY UPDATE predictedPoints = ?
-    """, (row['playerId'], row['season'], row['predicted_points'], row['predicted_points']))
-conn.commit()
+# Azure Blob Storage connection details
+connection_string = connection_string
+container_name = "mlops-data"
+blob_name = "player_predictions_2024.csv"
 
-# Close the connection
-conn.close()
+# Create a BlobServiceClient
+blob_service_client = BlobServiceClient.from_connection_string(connection_string)
+
+# Create a BlobClient
+blob_client = blob_service_client.get_blob_client(container=container_name, blob=blob_name)
+
+# Upload the CSV file to Blob Storage
+with open(csv_file_path, "rb") as data:
+    blob_client.upload_blob(data, overwrite=True)
 
