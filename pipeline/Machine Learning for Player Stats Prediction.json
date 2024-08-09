@@ -75,7 +75,7 @@
 				},
 				"userProperties": [],
 				"typeProperties": {
-					"notebookPath": "/Users/paramdesai4@cmail.carleton.ca/SportsAnalyticsPipeline/04-MLOps"
+					"notebookPath": "/Users/param.desai@x835r.onmicrosoft.com/SportsAnalyticsPipeline/04-MLOps"
 				},
 				"linkedServiceName": {
 					"referenceName": "AzureDatabricks1",
