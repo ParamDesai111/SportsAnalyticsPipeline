@@ -15,7 +15,7 @@ CREATE TABLE Teams (
 CREATE TABLE PlayerStatistics (
     id INT PRIMARY KEY,
     playerId VARCHAR(1000),
-    teamId INT,
+    teamCode VARCHAR(1000),
     season INT,
     games INT,
     gamesStarted INT,
