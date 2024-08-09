@@ -1,0 +1,9 @@
+{
+	"name": "SportsAnalyticsPipeline-ADFactory",
+	"location": "eastus",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "e6bed5c5-b1a8-4a3d-a1d5-fa27a9b99b82",
+		"tenantId": "a723d73c-f6d8-47ec-98f3-c5dd0e1f8b95"
+	}
+}
