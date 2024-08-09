@@ -9,7 +9,7 @@ from pyspark.sql.types import *
 
 # Set Azure Storage account key
 spark.conf.set(
-  "fs.azure.account.key.sportsanalyticsplstg.dfs.core.windows.net",
+  "fs.azure.account.key.sportsanalyticsplstga.dfs.core.windows.net",
   access_key
 )
 

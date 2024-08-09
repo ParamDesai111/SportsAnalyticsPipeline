@@ -45,7 +45,7 @@ connection_string = connection_string
 container_land_api_response = "land-api-response"
 
 spark.conf.set(
-  "fs.azure.account.key.sportsanalyticsplstg.dfs.core.windows.net",
+  "fs.azure.account.key.sportsanalyticsplstga.dfs.core.windows.net",
   access_key
 )
 
@@ -92,24 +92,24 @@ team_dict = {
     "WAS": "Washington Wizards"
 }
 
-input_path = "abfss://land-api-response@sportsanalyticsplstg.dfs.core.windows.net/playerdata"
-output_path_teams = "abfss://raw-data@sportsanalyticsplstg.dfs.core.windows.net/teams/"
-output_path_playerstats = "abfss://raw-data@sportsanalyticsplstg.dfs.core.windows.net/playerstats"
-output_path_player = "abfss://raw-data@sportsanalyticsplstg.dfs.core.windows.net/player"
+input_path = "abfss://land-api-response@sportsanalyticsplstga.dfs.core.windows.net/playerdata"
+output_path_teams = "abfss://raw-data@sportsanalyticsplstga.dfs.core.windows.net/teams/"
+output_path_playerstats = "abfss://raw-data@sportsanalyticsplstga.dfs.core.windows.net/playerstats"
+output_path_player = "abfss://raw-data@sportsanalyticsplstga.dfs.core.windows.net/player"
 
 
 
 # COMMAND ----------
 
 # Connection to Azure SQL Tables
-jdbcHostname = server_name
-jdbcDatabase = database
+jdbcHostname = "sportsanalyticspipeline-dbserver.database.windows.net"
+jdbcDatabase = "SportsAnalyticsPipeline-DB"
 jdbcPort = 1433
 jdbcUrl = f"jdbc:sqlserver://{jdbcHostname}:{jdbcPort};database={jdbcDatabase};encrypt=true;trustServerCertificate=false;hostNameInCertificate=*.database.windows.net;loginTimeout=30"
 
 connectionProperties = {
   "user" : "SAPDBAdmin",
-  "password" : password,
+  "password" : "sqladminParam!",
   "driver" : "com.microsoft.sqlserver.jdbc.SQLServerDriver"
 }
 

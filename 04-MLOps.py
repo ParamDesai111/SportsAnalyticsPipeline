@@ -9,8 +9,8 @@
 # COMMAND ----------
 
 # Connection to Azure SQL Tables
-jdbcHostname = "sportsanalyticspipeline-dbs.database.windows.net"
-jdbcDatabase = "SportsAnalyticsPipeline-ADB"
+jdbcHostname = "sportsanalyticspipeline-dbserver.database.windows.net"
+jdbcDatabase = "SportsAnalyticsPipeline-DB"
 jdbcPort = 1433
 jdbcUsername = "SAPDBAdmin"
 jdbcPassword = "sqladminParam!"
