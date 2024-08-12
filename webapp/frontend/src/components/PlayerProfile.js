@@ -1,15 +1,36 @@
 import React, { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';  // Import useParams from React Router
 
-function PlayerProfile({ match }) {
+function PlayerProfile() {
+    const { playerId } = useParams();  // Destructure the playerId from useParams
     const [player, setPlayer] = useState(null);
+    const [error, setError] = useState(null);  // State for handling errors
 
     useEffect(() => {
-        fetch(`/player/${match.params.playerId}`)
-            .then(res => res.json())
-            .then(data => setPlayer(data));
-    }, [match.params.playerId]);
+        fetch(`/player/${playerId}`)
+            .then(res => {
+                // Check if the response is JSON
+                if (res.headers.get('content-type')?.includes('application/json')) {
+                    return res.json();
+                } else {
+                    // Handle non-JSON responses
+                    return res.text().then(text => { 
+                        throw new Error(`Expected JSON, got: ${text}`); 
+                    });
+                }
+            })
+            .then(data => setPlayer(data))
+            .catch(error => {
+                console.error('Error:', error);
+                setError(error.message);  // Set the error message
+            });
+    }, [playerId]);
 
-    if (!player) return <div>Loading...</div>;
+    if (error) {
+        return <div>Error: {error}</div>;  // Display the error message if there's an error
+    }
+
+    if (!player) return <div>Loading...</div>;  // Display a loading message while fetching data
 
     return (
         <div>

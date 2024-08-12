@@ -2,8 +2,8 @@
 
 from flask import Blueprint, jsonify
 from sqlalchemy.orm import Session
-from ..database import get_db
-from ..models import Team, PlayerStatistics, Player
+from backend.database import get_db
+from backend.models import Team, PlayerStatistics, Player
 
 teams = Blueprint('teams', __name__)
 

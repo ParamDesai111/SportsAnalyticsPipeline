@@ -1,11 +1,10 @@
 # webapp/backend/models.py
 
-from sqlalchemy import Column, Integer, String, Float, ForeignKey
+from sqlalchemy import Column, Integer, String, Float, ForeignKey, PrimaryKeyConstraint
 from sqlalchemy.orm import relationship
-from .database import engine, Base
+from backend.database import Base, engine
 
-Base = declarative_base()
-
+# Define your models here
 class Player(Base):
     __tablename__ = "Players"
     
@@ -18,15 +17,15 @@ class Team(Base):
     __tablename__ = "Teams"
 
     teamId = Column(Integer, primary_key=True)
-    teamCode = Column(String(1000), unique=True)
-    teamName = Column(String(1000), unique=True)
+    teamCode = Column(String(1000))
+    teamName = Column(String(1000))
 
 class PlayerStatistics(Base):
     __tablename__ = "PlayerStatistics"
 
     id = Column(Integer, primary_key=True)
-    playerId = Column(String(1000), ForeignKey("Players.playerId"))
-    teamCode = Column(String(1000), ForeignKey("Teams.teamCode"))
+    playerId = Column(String(1000))
+    teamCode = Column(String(1000))
     season = Column(Integer)
     games = Column(Integer)
     gamesStarted = Column(Integer)
@@ -57,8 +56,8 @@ class PlayerStatistics(Base):
 class PlayerStatisticsPredicted(Base):
     __tablename__ = "PlayerStatisticsPredicted"
 
-    playerId = Column(String(1000), ForeignKey("Players.playerId"))
-    season = Column(Integer)
+    playerId = Column(String(1000), primary_key=True)
+    season = Column(Integer, primary_key=True)
     predicted_fieldGoals = Column(Float)
     predicted_fieldAttempts = Column(Float)
     predicted_fieldPercent = Column(Float)

@@ -1,7 +1,8 @@
 # webapp/backend/app.py
+
 from flask import Flask
-from routes.players import players
-from routes.teams import teams
+from backend.routes.players import players
+from backend.routes.teams import teams
 
 app = Flask(__name__)
 
