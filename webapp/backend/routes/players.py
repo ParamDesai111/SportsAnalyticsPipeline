@@ -31,7 +31,7 @@ def get_player_profile(playerId):
             "age": player.age
         },
         "statistics": [{"season": stat.season, "points": stat.points, "assists": stat.assists} for stat in player_stats],
-        "predictions": [{"season": pred.season, "predicted_points": pred.predicted_points} for pred in player_predictions]
+        "predictions": [{"season": pred.season, "predicted_points": pred.predicted_points, "predicted_assists": pred.predicted_assists} for pred in player_predictions]
     })
 
 @players.route('/players/season/<season>', methods=['GET'])

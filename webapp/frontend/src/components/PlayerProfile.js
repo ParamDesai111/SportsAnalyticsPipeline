@@ -40,13 +40,13 @@ function PlayerProfile() {
             <h4>Statistics:</h4>
             <ul>
                 {player.statistics.map(stat => (
-                    <li key={stat.season}>Season: {stat.season}, Points: {stat.points}</li>
+                    <li key={stat.season}>Season: {stat.season}, Points: {stat.points}, Assists: {stat.assists}</li>
                 ))}
             </ul>
             <h4>Predictions:</h4>
             <ul>
                 {player.predictions.map(pred => (
-                    <li key={pred.season}>Season: {pred.season}, Predicted Points: {pred.predicted_points}</li>
+                    <li key={pred.season}>Season: {pred.season}, Predicted Points: {pred.predicted_points}, Predicted Assists: {pred.predicted_assists}</li>
                 ))}
             </ul>
         </div>
