@@ -7,7 +7,8 @@ function Navbar() {
             <ul>
                 <li><Link to="/">Home</Link></li>
                 <li><Link to="/powerbi">Power BI Dashboard</Link></li>
-                <li><Link to="/players/season/2024">2024 Players</Link></li>
+                <li><Link to="/seasons">Seasons</Link></li>
+                <li><Link to="/teams">Teams</Link></li>
             </ul>
         </nav>
     );

@@ -4,11 +4,9 @@ import Navbar from './components/Navbar';
 import PlayerProfile from './components/PlayerProfile';
 import SeasonPlayers from './components/SeasonPlayers';
 import PowerBIDashboard from './components/PowerBIDashboard';
-
-// Simple Home Component
-function Home() {
-    return <h1>Welcome to the Sports Analytics Platform</h1>;
-}
+import SeasonsPage from './components/SeasonsPage';
+import TeamsPage from './components/TeamsPage';
+import TeamDetailPage from './components/TeamDetailPage';
 
 function App() {
     return (
@@ -16,10 +14,13 @@ function App() {
             <div>
                 <Navbar />
                 <Routes>
-                    <Route path="/" element={<Home />} />  {/* Home route */}
+                    <Route path="/" element={<div>Home Page</div>} />
                     <Route path="/player/:playerId" element={<PlayerProfile />} />
                     <Route path="/players/season/:season" element={<SeasonPlayers />} />
                     <Route path="/powerbi" element={<PowerBIDashboard />} />
+                    <Route path="/seasons" element={<SeasonsPage />} />
+                    <Route path="/teams" element={<TeamsPage />} />
+                    <Route path="/team/:teamCode" element={<TeamDetailPage />} />
                 </Routes>
             </div>
         </Router>
