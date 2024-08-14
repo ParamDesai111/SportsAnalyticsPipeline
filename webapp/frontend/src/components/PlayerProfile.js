@@ -1,19 +1,17 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';  // Import useParams from React Router
+import { useParams } from 'react-router-dom';
 
 function PlayerProfile() {
-    const { playerId } = useParams();  // Destructure the playerId from useParams
+    const { playerId } = useParams();
     const [player, setPlayer] = useState(null);
-    const [error, setError] = useState(null);  // State for handling errors
+    const [error, setError] = useState(null);
 
     useEffect(() => {
         fetch(`/player/${playerId}`)
             .then(res => {
-                // Check if the response is JSON
                 if (res.headers.get('content-type')?.includes('application/json')) {
                     return res.json();
                 } else {
-                    // Handle non-JSON responses
                     return res.text().then(text => { 
                         throw new Error(`Expected JSON, got: ${text}`); 
                     });
@@ -22,84 +20,150 @@ function PlayerProfile() {
             .then(data => setPlayer(data))
             .catch(error => {
                 console.error('Error:', error);
-                setError(error.message);  // Set the error message
+                setError(error.message);
             });
     }, [playerId]);
 
     if (error) {
-        return <div>Error: {error}</div>;  // Display the error message if there's an error
+        return <div>Error: {error}</div>;
     }
 
-    if (!player) return <div>Loading...</div>;  // Display a loading message while fetching data
+    if (!player) return <div>Loading...</div>;
+
+    // Helper function to round numbers to 2 decimal places
+    const roundToTwo = (num) => Math.round(num * 100) / 100;
 
     return (
         <div>
             <h1>{player.player.playerName}</h1>
             <h2>Position: {player.player.position}</h2>
             <h3>Age: {player.player.age}</h3>
+            
             <h4>Statistics:</h4>
-            <ul>
-                {player.statistics.map(stat => (
-                    <li key={stat.season}>
-                        <div>Season: {stat.season}</div>
-                        <div>Games: {stat.games}</div>
-                        <div>Games Started: {stat.gamesStarted}</div>
-                        <div>Minutes per Game: {stat.minutesPg}</div>
-                        <div>Field Goals: {stat.fieldGoals}</div>
-                        <div>Field Attempts: {stat.fieldAttempts}</div>
-                        <div>Field Percent: {stat.fieldPercent}</div>
-                        <div>Three FG: {stat.threeFg}</div>
-                        <div>Three Attempts: {stat.threeAttempts}</div>
-                        <div>Three Percent: {stat.threePercent}</div>
-                        <div>Two FG: {stat.twoFg}</div>
-                        <div>Two Attempts: {stat.twoAttempts}</div>
-                        <div>Two Percent: {stat.twoPercent}</div>
-                        <div>Effective FG Percent: {stat.effectFgPercent}</div>
-                        <div>Free Throws: {stat.ft}</div>
-                        <div>Free Throw Attempts: {stat.ftAttempts}</div>
-                        <div>Free Throw Percent: {stat.ftPercent}</div>
-                        <div>Offensive Rebounds: {stat.offensiveRb}</div>
-                        <div>Defensive Rebounds: {stat.defensiveRb}</div>
-                        <div>Total Rebounds: {stat.totalRb}</div>
-                        <div>Assists: {stat.assists}</div>
-                        <div>Steals: {stat.steals}</div>
-                        <div>Blocks: {stat.blocks}</div>
-                        <div>Turnovers: {stat.turnovers}</div>
-                        <div>Personal Fouls: {stat.personalFouls}</div>
-                        <div>Points: {stat.points}</div>
-                    </li>
-                ))}
-            </ul>
+            <table border="1" cellPadding="5" cellSpacing="0">
+                <thead>
+                    <tr>
+                        <th>Season</th>
+                        <th>Games</th>
+                        <th>Games Started</th>
+                        <th>Minutes per Game</th>
+                        <th>Field Goals</th>
+                        <th>Field Attempts</th>
+                        <th>Field Percent</th>
+                        <th>Three FG</th>
+                        <th>Three Attempts</th>
+                        <th>Three Percent</th>
+                        <th>Two FG</th>
+                        <th>Two Attempts</th>
+                        <th>Two Percent</th>
+                        <th>Effective FG Percent</th>
+                        <th>Free Throws</th>
+                        <th>Free Throw Attempts</th>
+                        <th>Free Throw Percent</th>
+                        <th>Offensive Rebounds</th>
+                        <th>Defensive Rebounds</th>
+                        <th>Total Rebounds</th>
+                        <th>Assists</th>
+                        <th>Steals</th>
+                        <th>Blocks</th>
+                        <th>Turnovers</th>
+                        <th>Personal Fouls</th>
+                        <th>Points</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {player.statistics.map(stat => (
+                        <tr key={stat.season}>
+                            <td>{stat.season}</td>
+                            <td>{stat.games}</td>
+                            <td>{stat.gamesStarted}</td>
+                            <td>{roundToTwo(stat.minutesPg)}</td>
+                            <td>{roundToTwo(stat.fieldGoals)}</td>
+                            <td>{roundToTwo(stat.fieldAttempts)}</td>
+                            <td>{roundToTwo(stat.fieldPercent)}</td>
+                            <td>{roundToTwo(stat.threeFg)}</td>
+                            <td>{roundToTwo(stat.threeAttempts)}</td>
+                            <td>{roundToTwo(stat.threePercent)}</td>
+                            <td>{roundToTwo(stat.twoFg)}</td>
+                            <td>{roundToTwo(stat.twoAttempts)}</td>
+                            <td>{roundToTwo(stat.twoPercent)}</td>
+                            <td>{roundToTwo(stat.effectFgPercent)}</td>
+                            <td>{roundToTwo(stat.ft)}</td>
+                            <td>{roundToTwo(stat.ftAttempts)}</td>
+                            <td>{roundToTwo(stat.ftPercent)}</td>
+                            <td>{roundToTwo(stat.offensiveRb)}</td>
+                            <td>{roundToTwo(stat.defensiveRb)}</td>
+                            <td>{roundToTwo(stat.totalRb)}</td>
+                            <td>{roundToTwo(stat.assists)}</td>
+                            <td>{roundToTwo(stat.steals)}</td>
+                            <td>{roundToTwo(stat.blocks)}</td>
+                            <td>{roundToTwo(stat.turnovers)}</td>
+                            <td>{roundToTwo(stat.personalFouls)}</td>
+                            <td>{roundToTwo(stat.points)}</td>
+                        </tr>
+                    ))}
+                </tbody>
+            </table>
+
             <h4>Predictions:</h4>
-            <ul>
-                {player.predictions.map(pred => (
-                    <li key={pred.season}>
-                        <div>Season: {pred.season}</div>
-                        <div>Predicted Field Goals: {pred.predicted_fieldGoals}</div>
-                        <div>Predicted Field Attempts: {pred.predicted_fieldAttempts}</div>
-                        <div>Predicted Field Percent: {pred.predicted_fieldPercent}</div>
-                        <div>Predicted Three FG: {pred.predicted_threeFg}</div>
-                        <div>Predicted Three Attempts: {pred.predicted_threeAttempts}</div>
-                        <div>Predicted Three Percent: {pred.predicted_threePercent}</div>
-                        <div>Predicted Two FG: {pred.predicted_twoFg}</div>
-                        <div>Predicted Two Attempts: {pred.predicted_twoAttempts}</div>
-                        <div>Predicted Two Percent: {pred.predicted_twoPercent}</div>
-                        <div>Predicted Effective FG Percent: {pred.predicted_effectFgPercent}</div>
-                        <div>Predicted Free Throws: {pred.predicted_ft}</div>
-                        <div>Predicted Free Throw Attempts: {pred.predicted_ftAttempts}</div>
-                        <div>Predicted Free Throw Percent: {pred.predicted_ftPercent}</div>
-                        <div>Predicted Offensive Rebounds: {pred.predicted_offensiveRb}</div>
-                        <div>Predicted Defensive Rebounds: {pred.predicted_defensiveRb}</div>
-                        <div>Predicted Total Rebounds: {pred.predicted_totalRb}</div>
-                        <div>Predicted Assists: {pred.predicted_assists}</div>
-                        <div>Predicted Steals: {pred.predicted_steals}</div>
-                        <div>Predicted Blocks: {pred.predicted_blocks}</div>
-                        <div>Predicted Turnovers: {pred.predicted_turnovers}</div>
-                        <div>Predicted Personal Fouls: {pred.predicted_personalFouls}</div>
-                        <div>Predicted Points: {pred.predicted_points}</div>
-                    </li>
-                ))}
-            </ul>
+            <table border="1" cellPadding="5" cellSpacing="0">
+                <thead>
+                    <tr>
+                        <th>Season</th>
+                        <th>Predicted Field Goals</th>
+                        <th>Predicted Field Attempts</th>
+                        <th>Predicted Field Percent</th>
+                        <th>Predicted Three FG</th>
+                        <th>Predicted Three Attempts</th>
+                        <th>Predicted Three Percent</th>
+                        <th>Predicted Two FG</th>
+                        <th>Predicted Two Attempts</th>
+                        <th>Predicted Two Percent</th>
+                        <th>Predicted Effective FG Percent</th>
+                        <th>Predicted Free Throws</th>
+                        <th>Predicted Free Throw Attempts</th>
+                        <th>Predicted Free Throw Percent</th>
+                        <th>Predicted Offensive Rebounds</th>
+                        <th>Predicted Defensive Rebounds</th>
+                        <th>Predicted Total Rebounds</th>
+                        <th>Predicted Assists</th>
+                        <th>Predicted Steals</th>
+                        <th>Predicted Blocks</th>
+                        <th>Predicted Turnovers</th>
+                        <th>Predicted Personal Fouls</th>
+                        <th>Predicted Points</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {player.predictions.map(pred => (
+                        <tr key={pred.season}>
+                            <td>{pred.season}</td>
+                            <td>{roundToTwo(pred.predicted_fieldGoals)}</td>
+                            <td>{roundToTwo(pred.predicted_fieldAttempts)}</td>
+                            <td>{roundToTwo(pred.predicted_fieldPercent)}</td>
+                            <td>{roundToTwo(pred.predicted_threeFg)}</td>
+                            <td>{roundToTwo(pred.predicted_threeAttempts)}</td>
+                            <td>{roundToTwo(pred.predicted_threePercent)}</td>
+                            <td>{roundToTwo(pred.predicted_twoFg)}</td>
+                            <td>{roundToTwo(pred.predicted_twoAttempts)}</td>
+                            <td>{roundToTwo(pred.predicted_twoPercent)}</td>
+                            <td>{roundToTwo(pred.predicted_effectFgPercent)}</td>
+                            <td>{roundToTwo(pred.predicted_ft)}</td>
+                            <td>{roundToTwo(pred.predicted_ftAttempts)}</td>
+                            <td>{roundToTwo(pred.predicted_ftPercent)}</td>
+                            <td>{roundToTwo(pred.predicted_offensiveRb)}</td>
+                            <td>{roundToTwo(pred.predicted_defensiveRb)}</td>
+                            <td>{roundToTwo(pred.predicted_totalRb)}</td>
+                            <td>{roundToTwo(pred.predicted_assists)}</td>
+                            <td>{roundToTwo(pred.predicted_steals)}</td>
+                            <td>{roundToTwo(pred.predicted_blocks)}</td>
+                            <td>{roundToTwo(pred.predicted_turnovers)}</td>
+                            <td>{roundToTwo(pred.predicted_personalFouls)}</td>
+                            <td>{roundToTwo(pred.predicted_points)}</td>
+                        </tr>
+                    ))}
+                </tbody>
+            </table>
         </div>
     );
 }

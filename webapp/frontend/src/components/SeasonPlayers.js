@@ -1,34 +1,43 @@
 import React, { useEffect, useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 
 function SeasonPlayers() {
-    const { season } = useParams();  // Destructure the season parameter from useParams
+    const { season } = useParams();
     const [players, setPlayers] = useState([]);
     const [error, setError] = useState(null);
 
     useEffect(() => {
         fetch(`/players/season/${season}`)
             .then(res => {
-                // Check if the response is JSON
                 if (res.headers.get('content-type')?.includes('application/json')) {
-                    return res.json();  // Parse as JSON
+                    return res.json();
                 } else {
-                    // If not JSON, handle the error
                     return res.text().then(text => { 
                         throw new Error(`Expected JSON, got: ${text}`); 
                     });
                 }
             })
-            .then(data => setPlayers(data))
+            .then(data => {
+                // Remove duplicate players based on playerId
+                const uniquePlayers = data.reduce((acc, player) => {
+                    if (!acc.some(p => p.playerId === player.playerId)) {
+                        acc.push(player);
+                    }
+                    return acc;
+                }, []);
+                setPlayers(uniquePlayers);
+            })
             .catch(error => {
                 console.error('Error:', error);
-                setError(error.message);  // Set error state
+                setError(error.message);
             });
     }, [season]);
 
     if (error) {
-        return <div>Error: {error}</div>;  // Display the error message
+        return <div>Error: {error}</div>;
     }
+
+    if (players.length === 0) return <div>No players found for this season.</div>;
 
     return (
         <div>
