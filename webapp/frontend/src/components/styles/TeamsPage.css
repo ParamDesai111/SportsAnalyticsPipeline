@@ -1,0 +1,45 @@
+/* TeamsPage.css */
+
+.teams-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    text-align: center;
+}
+
+.team-cards {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+}
+
+.team-card {
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 150px; /* Adjust the width to fit your design */
+    padding: 20px;
+    text-align: center;
+    transition: transform 0.2s;
+}
+
+.team-card:hover {
+    transform: translateY(-5px);
+}
+
+.team-logo {
+    width: 100px; /* Adjust size based on your design */
+    height: auto;
+    margin-bottom: 10px;
+}
+
+.team-name {
+    font-size: 1.2em;
+    color: #333;
+}
+
+.team-card a {
+    text-decoration: none;
+    color: inherit;
+}

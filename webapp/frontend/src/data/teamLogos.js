@@ -1,0 +1,43 @@
+// webapp/frontend/src/data/teamLogos.js
+
+const teamLogos = {
+    'GSW': 'https://upload.wikimedia.org/wikipedia/en/thumb/0/01/Golden_State_Warriors_logo.svg/400px-Golden_State_Warriors_logo.svg.png',
+    'UTA': 'https://upload.wikimedia.org/wikipedia/en/thumb/5/52/Utah_Jazz_logo_2022.svg/460px-Utah_Jazz_logo_2022.svg.png',
+    'NYK': 'https://upload.wikimedia.org/wikipedia/en/thumb/2/25/New_York_Knicks_logo.svg/480px-New_York_Knicks_logo.svg.png',
+    'ATL': 'https://upload.wikimedia.org/wikipedia/en/thumb/2/24/Atlanta_Hawks_logo.svg/400px-Atlanta_Hawks_logo.svg.png',
+    'HOU': 'https://upload.wikimedia.org/wikipedia/en/thumb/2/28/Houston_Rockets.svg/340px-Houston_Rockets.svg.png',
+    'ORL': 'https://upload.wikimedia.org/wikipedia/en/thumb/1/10/Orlando_Magic_logo.svg/440px-Orlando_Magic_logo.svg.png',
+    'PHI': 'https://upload.wikimedia.org/wikipedia/en/thumb/0/0e/Philadelphia_76ers_logo.svg/400px-Philadelphia_76ers_logo.svg.png',
+    'PHO': 'https://upload.wikimedia.org/wikipedia/en/thumb/d/dc/Phoenix_Suns_logo.svg/380px-Phoenix_Suns_logo.svg.png',
+    'POR': 'https://upload.wikimedia.org/wikipedia/en/thumb/2/21/Portland_Trail_Blazers_logo.svg/440px-Portland_Trail_Blazers_logo.svg.png',
+    'SAC': 'https://upload.wikimedia.org/wikipedia/en/thumb/c/c7/SacramentoKings.svg/360px-SacramentoKings.svg.png',
+    'SAS': 'https://upload.wikimedia.org/wikipedia/en/thumb/a/a2/San_Antonio_Spurs.svg/480px-San_Antonio_Spurs.svg.png',
+    'SEA': 'https://upload.wikimedia.org/wikipedia/en/thumb/a/a4/Seattle_SuperSonics_logo.svg/400px-Seattle_SuperSonics_logo.svg.png',
+    'TOT': 'https://upload.wikimedia.org/wikipedia/en/thumb/0/03/National_Basketball_Association_logo.svg/210px-National_Basketball_Association_logo.svg.png', // For various teams
+    'IND': 'https://upload.wikimedia.org/wikipedia/en/thumb/1/1b/Indiana_Pacers.svg/400px-Indiana_Pacers.svg.png',
+    'BOS': 'https://upload.wikimedia.org/wikipedia/en/thumb/8/8f/Boston_Celtics.svg/380px-Boston_Celtics.svg.png',
+    'BRK': 'https://upload.wikimedia.org/wikipedia/en/thumb/4/40/Brooklyn_Nets_primary_icon_logo_2024.svg/340px-Brooklyn_Nets_primary_icon_logo_2024.svg.png',
+    'CHH': 'https://upload.wikimedia.org/wikipedia/en/thumb/c/c4/Charlotte_Hornets_%282014%29.svg/440px-Charlotte_Hornets_%282014%29.svg.png',
+    'CHI': 'https://upload.wikimedia.org/wikipedia/en/thumb/6/67/Chicago_Bulls_logo.svg/400px-Chicago_Bulls_logo.svg.png',
+    'CLE': 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/4b/Cleveland_Cavaliers_logo.svg/340px-Cleveland_Cavaliers_logo.svg.png',
+    'DAL': 'https://upload.wikimedia.org/wikipedia/en/thumb/9/97/Dallas_Mavericks_logo.svg/420px-Dallas_Mavericks_logo.svg.png',
+    'DEN': 'https://upload.wikimedia.org/wikipedia/en/thumb/7/76/Denver_Nuggets.svg/400px-Denver_Nuggets.svg.png',
+    'DET': 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c9/Logo_of_the_Detroit_Pistons.svg/400px-Logo_of_the_Detroit_Pistons.svg.png',
+    'LAC': 'https://upload.wikimedia.org/wikipedia/en/thumb/e/ed/Los_Angeles_Clippers_%282024%29.svg/440px-Los_Angeles_Clippers_%282024%29.svg.png',
+    'LAL': 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/3c/Los_Angeles_Lakers_logo.svg/440px-Los_Angeles_Lakers_logo.svg.png',
+    'MIA': 'https://upload.wikimedia.org/wikipedia/en/thumb/f/fb/Miami_Heat_logo.svg/400px-Miami_Heat_logo.svg.png',
+    'MIL': 'https://upload.wikimedia.org/wikipedia/en/thumb/4/4a/Milwaukee_Bucks_logo.svg/360px-Milwaukee_Bucks_logo.svg.png',
+    'MIN': 'https://upload.wikimedia.org/wikipedia/en/thumb/c/c2/Minnesota_Timberwolves_logo.svg/400px-Minnesota_Timberwolves_logo.svg.png',
+    'NJN': 'https://lh4.googleusercontent.com/proxy/m3rjNQdimbuZTBm3MCeZf1lhQnB2rebNnhhhIc50cm8dbOD-H4ZCijwRsNT3Zr23qF2koj-q8-NhmXTQHufLMucSVwPClI8m2JphYTovSr4bIQ782U7n-x1Yca6139s_Lq2esI52gfjI_pE',
+    'WSB': 'https://lh3.googleusercontent.com/proxy/mKqv5qoBThERHZVSgDQ6TfovALV8_AcwbvcWyo28IUbDVjkQGXZoedwN8wfEtRKURFjr7kmk8fDPskBmVAwbkL6sW_8L5ZUc1RWqHPu-CBD7zAvjXE3kxhrZvNKYemW5dwLnlgADlh0TlWU',
+    'CHA': 'https://1000logos.net/wp-content/uploads/2016/10/Bobcats-Logo.png',
+    'MEM': 'https://upload.wikimedia.org/wikipedia/en/thumb/f/f1/Memphis_Grizzlies.svg/380px-Memphis_Grizzlies.svg.png',
+    'VAN': 'https://upload.wikimedia.org/wikipedia/en/thumb/1/1e/Vancouver_Grizzlies_logo.svg/440px-Vancouver_Grizzlies_logo.svg.png',
+    'NOP': 'https://upload.wikimedia.org/wikipedia/en/thumb/0/0d/New_Orleans_Pelicans_logo.svg/500px-New_Orleans_Pelicans_logo.svg.png',
+    'NOH': 'https://lh5.googleusercontent.com/proxy/aP4VYUhLIPumTCU21VM_UKmjP0CYgD-spDow2W2LVjbgnW8iUHlCS6kzwqIMA9EBwk_O4lFiPpe-dR41UjSV241WU1rIB40w2iQbGeUW1WD2b_YMogoBywNqfUNfCijPtGRFQSC-5iX_wj8a',
+    'OKC': 'https://upload.wikimedia.org/wikipedia/en/thumb/5/5d/Oklahoma_City_Thunder.svg/400px-Oklahoma_City_Thunder.svg.png',
+    'TOR': 'https://upload.wikimedia.org/wikipedia/en/thumb/3/36/Toronto_Raptors_logo.svg/400px-Toronto_Raptors_logo.svg.png',
+    'WAS': 'https://upload.wikimedia.org/wikipedia/en/thumb/0/02/Washington_Wizards_logo.svg/400px-Washington_Wizards_logo.svg.png',
+};
+
+export default teamLogos;

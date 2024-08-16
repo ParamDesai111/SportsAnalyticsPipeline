@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
+import './styles/SeasonPlayers.css'; // Assuming you create a corresponding CSS file for styling
 
 function SeasonPlayers() {
     const { season } = useParams();
@@ -40,15 +41,18 @@ function SeasonPlayers() {
     if (players.length === 0) return <div>No players found for this season.</div>;
 
     return (
-        <div>
+        <div className="season-players-container">
             <h1>Players for Season {season}</h1>
-            <ul>
+            <div className="player-cards">
                 {players.map(player => (
-                    <li key={player.playerId}>
-                        <Link to={`/player/${player.playerId}`}>{player.playerName}</Link>
-                    </li>
+                    <div key={player.playerId} className="player-card">
+                        <Link to={`/player/${player.playerId}`}>
+                            <h3 className="player-name">{player.playerName}</h3>
+                        </Link>
+                        {/* Add more player details if needed */}
+                    </div>
                 ))}
-            </ul>
+            </div>
         </div>
     );
 }

@@ -1,6 +1,8 @@
 // webapp/frontend/src/components/TeamsPage.js
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import teamLogos from '../data/teamLogos'; // Import the team logos mapping
+import './styles/TeamsPage.css'; // Assuming you have a corresponding CSS file for styling
 
 function TeamsPage() {
     const [teams, setTeams] = useState([]);
@@ -12,15 +14,22 @@ function TeamsPage() {
     }, []);
 
     return (
-        <div>
+        <div className="teams-container">
             <h1>All Teams</h1>
-            <ul>
+            <div className="team-cards">
                 {teams.map(team => (
-                    <li key={team.teamCode}>
-                        <Link to={`/team/${team.teamCode}`}>{team.teamName}</Link>
-                    </li>
+                    <div key={team.teamCode} className="team-card">
+                        <Link to={`/team/${team.teamCode}`}>
+                            <img 
+                                src={teamLogos[team.teamCode]} 
+                                alt={`${team.teamName} logo`} 
+                                className="team-logo" 
+                            />
+                            <h3 className="team-name">{team.teamName}</h3>
+                        </Link>
+                    </div>
                 ))}
-            </ul>
+            </div>
         </div>
     );
 }

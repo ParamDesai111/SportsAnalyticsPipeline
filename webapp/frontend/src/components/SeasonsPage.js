@@ -1,6 +1,7 @@
 // webapp/frontend/src/components/SeasonsPage.js
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import './styles/SeasonsPage.css'; // Assuming you create a corresponding CSS file for styling
 
 function SeasonsPage() {
     const [seasons, setSeasons] = useState([]);
@@ -15,15 +16,17 @@ function SeasonsPage() {
     }, []);
 
     return (
-        <div>
+        <div className="seasons-container">
             <h1>All Seasons</h1>
-            <ul>
+            <div className="season-cards">
                 {seasons.map(season => (
-                    <li key={season}>
-                        <Link to={`/players/season/${season}`}>Season {season}</Link>
-                    </li>
+                    <div key={season} className="season-card">
+                        <Link to={`/players/season/${season}`}>
+                            <h3 className="season-name">Season {season}</h3>
+                        </Link>
+                    </div>
                 ))}
-            </ul>
+            </div>
         </div>
     );
 }
