@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-
+// look into the useParams hook from react-router-dom
 function PlayerProfile() {
     const { playerId } = useParams();
     const [player, setPlayer] = useState(null);
