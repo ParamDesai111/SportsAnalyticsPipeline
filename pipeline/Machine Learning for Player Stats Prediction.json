@@ -27,7 +27,7 @@
 						"storeSettings": {
 							"type": "AzureBlobStorageReadSettings",
 							"recursive": true,
-							"wildcardFileName": "*",
+							"wildcardFileName": "player_predictions_2025.csv",
 							"enablePartitionDiscovery": false
 						},
 						"formatSettings": {
