@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
+import './styles/PlayerProfile.css';
 // look into the useParams hook from react-router-dom
 function PlayerProfile() {
     const { playerId } = useParams();
@@ -40,7 +41,7 @@ function PlayerProfile() {
             <h3>Age: {player.player.age}</h3>
             
             <h4>Statistics:</h4>
-            <table border="1" cellPadding="5" cellSpacing="0">
+            <table border="1" cellPadding="5" cellSpacing="0" className="player-stats">
                 <thead>
                     <tr>
                         <th>Season</th>
@@ -106,7 +107,7 @@ function PlayerProfile() {
             </table>
 
             <h4>Predictions:</h4>
-            <table border="1" cellPadding="5" cellSpacing="0">
+            <table border="1" cellPadding="5" cellSpacing="0" className="player-predictions">
                 <thead>
                     <tr>
                         <th>Season</th>

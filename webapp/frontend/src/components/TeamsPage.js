@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import teamLogos from '../data/teamLogos'; // Import the team logos mapping
-import './styles/TeamsPage.css'; // Assuming you have a corresponding CSS file for styling
+import './styles/TeamsPage.css';
 
 function TeamsPage() {
     const [teams, setTeams] = useState([]);

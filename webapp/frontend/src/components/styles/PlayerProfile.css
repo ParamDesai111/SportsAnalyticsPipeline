@@ -1,0 +1,48 @@
+/* PlayerProfile */
+
+.player-predictions,
+.player-stats{
+    border-collapse: collapse;
+    margin: 25px 0;
+    font-size: 0.9em;
+    font-family: sans-serif;
+    min-width: 400px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+}
+
+.player-stats thead tr {
+    background-color: rgb(25, 64, 136); 
+    color: #ffffff;
+    text-align: left;
+}
+
+.player-predictions thead tr {
+    background-color: rgb(200, 51, 58); 
+    color: #ffffff;
+    text-align: left;
+}
+
+.player-predictions th,
+.player-predictions td,
+.player-stats th,
+.player-stats td {
+    padding: 12px 15px;
+}
+
+.player-predictions tbody tr,
+.player-stats tbody tr {
+    border-bottom: 1px solid #dddddd;
+}
+
+.player-predictions tbody tr:nth-of-type(even),
+.player-stats tbody tr:nth-of-type(even) {
+    background-color: #f3f3f3b8;
+}
+
+.player-stats tbody tr:last-of-type {
+    border-bottom: 2px solid rgb(200, 51, 58)
+}
+
+.player-predictions tbody tr:last-of-type {
+    border-bottom: 2px solid rgb(25, 64, 136)
+}
